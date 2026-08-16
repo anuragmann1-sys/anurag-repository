@@ -2,7 +2,15 @@ name: Terraform Azure
 
 on:
   push:
+    branches:
+      - feature/anurag-rg
   pull_request:
+    branches:
+      - feature/anurag-rg
+
+permissions:
+  id-token: write
+  contents: read
 
 jobs:
   terraform:
@@ -15,6 +23,13 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Terraform Init
         run: terraform init
 
@@ -23,9 +38,3 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan
-        - name: Azure Login
-  uses: azure/login@v3
-  with:
-    client-id: ${{ secrets.AZURE_CLIENT_ID }}
-    tenant-id: ${{ 44ff9492-6357-4790-9759-8d5b4666c643 }}
-    subscription-id: ${{ f506e9ea-7a47-4c62-82ac-24efcf83b366 }}
